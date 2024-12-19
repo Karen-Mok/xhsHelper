@@ -17,7 +17,7 @@
     savedPosts.forEach((post) => {
       const div = document.createElement('div');
       div.className = 'post';
-      div.innerHTML = `<strong>${post.url}</strong><br>收藏夹: ${post.collections.join(', ')}<br>${post.timestamp}`;
+      div.innerHTML = `<strong>${post.url}</strong><br>标题: ${post.title}<br>收藏夹: ${post.collection}<br>${post.timestamp}`;
       savedList.appendChild(div);
     });
 });

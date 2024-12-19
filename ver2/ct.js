@@ -33,7 +33,6 @@ content.js 的主要功能是监听用户点击事件和收藏操作，获取相
             type: 'post_click',
             data: {
               title: postTitle,
-              id: postLink,
               link: postLink,
             }
           });
@@ -50,36 +49,46 @@ content.js 的主要功能是监听用户点击事件和收藏操作，获取相
       const saveButton = document.querySelector('.collect-wrapper');
       //saveButton.addEventListener('click', () => {  //先监听收藏按钮click事件，再监测dom变化
       document.addEventListener('click', (event) => {
-
+        
       //alert(event.type + " at " + event.currentTarget);
 
-      //let clickElement = event.target.closest('.collect-wrapper');
-      let clickElement = event.target.closest('.board-item');
-      if (clickElement) {  //如果点击的是收藏列表中的一个
+      let clickElement = event.target.closest('.collect-wrapper'); // 假设帖子卡片有类名 `post-card`
+      if (clickElement) {  //如果点击的是收藏按钮
 
-      let t = setInterval(() => {
-              const savedCollection = clickElement.querySelector('.name-text').textContent; // 假设收藏弹窗有类名 `save-dialog`
-              
-              /*获取所有收藏夹，可用，但没必要
+      // 监测dom变化  
+      //const observer = new MutationObserver(() => {
+        //const saveButton = document.querySelector('.collect-wrapper'); // 假设收藏按钮有类名 `save-button`
+        //if (saveButton) {
+          //lert("检测到收藏列表")
+          //saveButton.addEventListener('click', () => {
+            let t = setInterval(() => {
+              const saveDialog = document.querySelector('.board-list'); // 假设收藏弹窗有类名 `save-dialog`
               const collections = Array.from(
                 saveDialog.querySelectorAll('.board-item')
-              ).map((item) => item.innerText);*/
+              ).map((item) => item.innerText);
   
+              console.log('用户收藏了帖子，收藏夹:', collections);
+              //alert('用户收藏了帖子，收藏夹:', collections);
   
               // 将收藏信息发送到后台
               chrome.runtime.sendMessage({
                 type: 'post_save',
                 data: {
-                  title: document.querySelector("#detail-title").textContent,
-                  id:window.location.origin+window.location.pathname,
                   url: window.location.href,
-                  collection: savedCollection,  //收藏到指定收藏夹
+                  collections: collections,
                 }
               });
 
               clearInterval(t);
             }, 1000); // 延迟以确保收藏夹弹窗内容加载完成
+          //});
+  
+          // 停止观察，避免重复绑定事件
+          //observer.disconnect();
+        //}
+      //});
 
+      //observer.observe(document.body, { childList: true, subtree: true });
       
       }
 

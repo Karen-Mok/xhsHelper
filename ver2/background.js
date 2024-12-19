@@ -26,8 +26,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       chrome.storage.local.get(['savedPosts'], (result) => {
         const savedPosts = result.savedPosts || [];
         savedPosts.push({
+          title: message.data.title,
+          id: message.data.id,
           url: message.data.url,
-          collections: message.data.collections,
+          collection: message.data.collection,
           timestamp: new Date().toISOString(),
         });
   
