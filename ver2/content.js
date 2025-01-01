@@ -3,15 +3,17 @@
 
   // 当前页面路径
   let previousPath = window.location.pathname;
+  let oldHref = document.location.href;
 
   // 判断页面类型（首页或详情页）
   function handlePageChange() {
     const currentPath = window.location.pathname;
 
-    if (currentPath === previousPath) {
-      //alert("pathname无变化")
+    //导致第一点击的帖子不记录，第二个才开始记录的罪魁祸首
+    /*if (currentPath === previousPath) {
+      alert("pathname无变化")
       return; // 如果路径没有变化，则不需要处理
-    }
+    }*/
 
     //alert('页面路径发生变化:', previousPath, '=>', currentPath);
 
@@ -149,17 +151,20 @@
   window.addEventListener("load", observeUrlChange)*/
 
   const observeUrlChange = () => {
-    let oldHref = document.location.href;
+    //let oldHref = document.location.href;
     const targetNode = document.querySelector('body'); // Or a more specific element
     if (!targetNode) return; // Handle cases where the target is not yet available
   
     const observerOptions = { childList: true, subtree: true };
   
     const observer = new MutationObserver(mutations => {
+      /*
       if (oldHref !== document.location.href) {
         oldHref = document.location.href;
         handlePageChange();
-      }
+      }*/
+     //alert("observer启动");  //就算在首页啥也不动，也会自动循环执行这个代码块
+      handlePageChange();
     });
   
     observer.observe(targetNode, observerOptions);
